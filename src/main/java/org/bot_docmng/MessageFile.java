@@ -30,8 +30,14 @@ public class MessageFile implements Message {
                     task.getFirstFile().getFileInputStream());
             try {
                 message = bot.execute(document);
+                String fileId;
+                try {
+                    fileId = message.getDocument().getFileId();
+                } catch (NullPointerException е) {
+                    fileId = message.getAudio().getFileId();
+                }
                 new Database().putFile(task.getFirstFile().getUid(),
-                        message.getDocument().getFileId());
+                        fileId);
                 task.getFirstFile().deleteFile();
                 task.putTask(Long.toString(message.getMessageId()));
             } catch (TelegramApiException e) {

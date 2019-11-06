@@ -81,8 +81,7 @@ public class Task {
             Task task = new Task(taskUid);
             task.setPerformer(new Performer(Long.toString(chatId)));
             new MessageFactory(task).create().send();
-            BotLogger.info("Thread: " + Thread.currentThread().getName()
-                    + ", Chat id: " + chatId
+            BotLogger.info("Chat id: " + chatId
                     + ", Message id: " + messageId
                     + ", Task id: " + taskUid);
         }
@@ -90,21 +89,23 @@ public class Task {
     }
 
     static void sendTasksFromPeriod() {
+        BotLogger.info("Start sending task from period");
         Performer[] performers = Performer.getPerformers();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         String begin = new Database().getTimeByFunction("scheduler_timestamp");
         String end = dateFormat.format(new Date());
+        BotLogger.info("Start time: " + begin + ", End time: " + end);
         for (int i = 0; i < performers.length; i++) {
             ArrayList<String> tasksUids = Task.getTasksBuPerformer(performers[i], begin, end);
             for (String taskUid : tasksUids) {
                 Task task = new Task(taskUid);
                 task.setPerformer(new Performer(performers[i].getUid()));
                 new MessageFactory(task).create().send();
-                BotLogger.info("Thread: " + Thread.currentThread().getName()
-                        + ", Chat id: " + performers[i].getChatID()
+                BotLogger.info("Chat id: " + performers[i].getChatID()
                         + ", Task id: " + taskUid);
             }
         }
+        BotLogger.info("End sending task from period");
         new Database().putTimeByFunction("scheduler_timestamp", end);
     }
 

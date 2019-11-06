@@ -103,8 +103,7 @@ public class Bot extends TelegramLongPollingBot {
                         map.put("message_id", messageId);
                         new Database().putAddTask(map);
                     } catch (TelegramApiException e) {
-                        BotLogger.info("Thread: " + Thread.currentThread().getName()
-                                + ", Chat id: " + update.getCallbackQuery().getMessage().getChatId()
+                        BotLogger.info("Chat id: " + update.getCallbackQuery().getMessage().getChatId()
                                 + ", Message id: " + update.getCallbackQuery().getMessage().getMessageId()
                                 + ", CallbackQuery: " + update.getCallbackQuery().getData()
                                 + ", Exception: " + e.getMessage());
@@ -141,8 +140,7 @@ public class Bot extends TelegramLongPollingBot {
                             Long.toString(update.getCallbackQuery().getMessage().getChatId()),
                             Long.toString(update.getCallbackQuery().getMessage().getMessageId())).create().update();
                     String response = task.resolveTask(request);
-                    BotLogger.info("Thread: " + Thread.currentThread().getName()
-                            + ", Chat id: " + update.getCallbackQuery().getMessage().getChatId()
+                    BotLogger.info("Chat id: " + update.getCallbackQuery().getMessage().getChatId()
                             + ", Message id: " + update.getCallbackQuery().getMessage().getMessageId()
                             + ", CallbackQuery: " + update.getCallbackQuery().getData()
                             + ", Response: " + response);
@@ -151,8 +149,7 @@ public class Bot extends TelegramLongPollingBot {
                         new MessageFactory(new Task(Long.toString(update.getCallbackQuery().getMessage().getChatId()),
                                 Long.toString(update.getCallbackQuery().getMessage().getMessageId()))).create().update();
                     } catch (InterruptedException e) {
-                        BotLogger.info("Thread: " + Thread.currentThread().getName()
-                                + ", Chat id: " + update.getCallbackQuery().getMessage().getChatId()
+                        BotLogger.info("Chat id: " + update.getCallbackQuery().getMessage().getChatId()
                                 + ", Message id: " + update.getCallbackQuery().getMessage().getMessageId()
                                 + ", CallbackQuery: " + update.getCallbackQuery().getData()
                                 + ", Exception: " + e.getMessage());
