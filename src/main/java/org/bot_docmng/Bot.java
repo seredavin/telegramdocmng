@@ -26,7 +26,7 @@ public class Bot extends TelegramLongPollingBot {
         botUserName = Setup.getInstance().getBotUserName();
         token = Setup.getInstance().getBotToken();
     }
-    
+
     static void start() {
 //        System.getProperties().put( "proxySet", "true" );
 //        System.getProperties().put( "socksProxyHost", "127.0.0.1" );
