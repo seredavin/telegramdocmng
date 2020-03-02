@@ -1,10 +1,15 @@
 package org.bot_docmng;
 
+import org.telegram.telegrambots.bots.DefaultBotOptions;
+import org.telegram.telegrambots.meta.ApiContext;
+
 import java.util.Map;
 
 final class Setup {
     private static final Map<String, String> env = System.getenv();
     private static Setup instance;
+
+    private static DefaultBotOptions botOptions;
 
     private Setup() {
     }
@@ -18,6 +23,16 @@ final class Setup {
 
     String getBotUserName() {
         return env.get("TELEGRAM_USERNAME");
+    }
+
+    DefaultBotOptions getBotOptions() {
+        DefaultBotOptions botOptions = ApiContext.getInstance(DefaultBotOptions.class);
+        if (!env.get("SOCKS_HOST").isEmpty() && !env.get("SOCKS_PORT").isEmpty()) {
+            botOptions.setProxyHost(env.get("SOCKS_HOST"));
+            botOptions.setProxyPort(Integer.parseInt(env.get("SOCKS_PORT")));
+            botOptions.setProxyType(DefaultBotOptions.ProxyType.SOCKS5);
+        }
+        return botOptions;
     }
 
     String getBotToken() {

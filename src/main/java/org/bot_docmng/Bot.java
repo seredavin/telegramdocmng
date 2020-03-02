@@ -1,6 +1,7 @@
 package org.bot_docmng;
 
 import org.telegram.telegrambots.ApiContextInitializer;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -17,19 +18,28 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
-    private static String botUserName;
-    private static String token;
+    private static String botUserName = Setup.getInstance().getBotUserName();
+    private static String token = Setup.getInstance().getBotToken();
 
-    Bot() {
+    Bot(DefaultBotOptions botOptions) {
+        super(botOptions);
         botUserName = Setup.getInstance().getBotUserName();
         token = Setup.getInstance().getBotToken();
     }
+//    Bot () {
+//
+//    }
 
-    public static void start() {
+
+    static void start() {
+//        System.getProperties().put( "proxySet", "true" );
+//        System.getProperties().put( "socksProxyHost", "127.0.0.1" );
+//        System.getProperties().put( "socksProxyPort", "9150" );
         ApiContextInitializer.init();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         try {
-            telegramBotsApi.registerBot(new Bot());
+            Bot mybot = new Bot(Setup.getInstance().getBotOptions());
+            telegramBotsApi.registerBot(mybot);
         } catch (TelegramApiRequestException e) {
             BotLogger.error(e.getMessage());
         }

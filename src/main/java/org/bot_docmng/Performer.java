@@ -28,7 +28,7 @@ class Performer {
         } else {
             String json = null;
             try {
-                json = Connector.getRequest(new HashMap<String, String>(), "user/" + uid);
+                json = Connector.getRequest(new HashMap<>(), "user/" + uid);
             } catch (URISyntaxException | IOException | InterruptedException e) {
                 BotLogger.error(e.getMessage());
             }
@@ -55,9 +55,11 @@ class Performer {
         Gson gson = new Gson();
         JsonPerformers[] jsonPerformers = gson.fromJson(json, JsonPerformers[].class);
         Performer[] performers = new Performer[jsonPerformers.length];
+
         for (int i = 0; i < jsonPerformers.length; i++) {
             performers[i] = new Performer(jsonPerformers[i].performer_uid);
         }
+
         return performers;
     }
 
@@ -97,7 +99,7 @@ class Performer {
         message.setParseMode("Markdown");
         message.setReplyMarkup(keyboardMarkup);
 
-        Bot bot = new Bot();
+        Bot bot = new Bot(Setup.getInstance().getBotOptions());
         try {
             bot.execute(message);
         } catch (TelegramApiException e) {

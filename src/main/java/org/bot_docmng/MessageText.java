@@ -13,7 +13,7 @@ public class MessageText implements Message {
     private Task task;
 
     MessageText(Task task) {
-        this.bot = new Bot();
+        this.bot = new Bot(Setup.getInstance().getBotOptions());
         this.task = task;
     }
 

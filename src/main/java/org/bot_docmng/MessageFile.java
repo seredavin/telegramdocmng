@@ -13,7 +13,7 @@ public class MessageFile implements Message {
     private org.telegram.telegrambots.meta.api.objects.Message message;
 
     MessageFile(Task task) {
-        this.bot = new Bot();
+        this.bot = new Bot(Setup.getInstance().getBotOptions());
         this.task = task;
     }
 
@@ -33,7 +33,7 @@ public class MessageFile implements Message {
                 String fileId;
                 try {
                     fileId = message.getDocument().getFileId();
-                } catch (NullPointerException е) {
+                } catch (NullPointerException e) {
                     fileId = message.getAudio().getFileId();
                 }
                 new Database().putFile(task.getFirstFile().getUid(),

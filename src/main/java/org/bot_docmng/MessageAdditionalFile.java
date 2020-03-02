@@ -13,7 +13,7 @@ public class MessageAdditionalFile implements Message {
         this.file = file;
         this.replyId = replyId;
         this.chatId = chatId;
-        this.bot = new Bot();
+        this.bot = new Bot(Setup.getInstance().getBotOptions());
     }
 
     @Override

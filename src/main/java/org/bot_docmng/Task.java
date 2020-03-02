@@ -1,16 +1,12 @@
 package org.bot_docmng;
 
 import com.google.gson.Gson;
-import org.aopalliance.reflect.Class;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -90,23 +86,27 @@ public class Task {
 
     static void sendTasksFromPeriod() {
         BotLogger.info("Start sending task from period");
-        Performer[] performers = Performer.getPerformers();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        String begin = new Database().getTimeByFunction("scheduler_timestamp");
-        String end = dateFormat.format(new Date());
-        BotLogger.info("Start time: " + begin + ", End time: " + end);
-        for (int i = 0; i < performers.length; i++) {
-            ArrayList<String> tasksUids = Task.getTasksBuPerformer(performers[i], begin, end);
-            for (String taskUid : tasksUids) {
-                Task task = new Task(taskUid);
-                task.setPerformer(new Performer(performers[i].getUid()));
-                new MessageFactory(task).create().send();
-                BotLogger.info("Chat id: " + performers[i].getChatID()
-                        + ", Task id: " + taskUid);
+        try {
+            Performer[] performers = Performer.getPerformers();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+            String begin = new Database().getTimeByFunction("scheduler_timestamp");
+            String end = dateFormat.format(new Date());
+            BotLogger.info("Start time: " + begin + ", End time: " + end);
+            for (Performer value : performers) {
+                ArrayList<String> tasksUids = Task.getTasksBuPerformer(value, begin, end);
+                for (String taskUid : tasksUids) {
+                    Task task = new Task(taskUid);
+                    task.setPerformer(new Performer(value.getUid()));
+                    new MessageFactory(task).create().send();
+                    BotLogger.info("Chat id: " + value.getChatID()
+                            + ", Task id: " + taskUid);
+                }
             }
+            BotLogger.info("End sending task from period");
+            new Database().putTimeByFunction("scheduler_timestamp", end);
+        } catch (Exception e) {
+            BotLogger.error(e.getMessage());
         }
-        BotLogger.info("End sending task from period");
-        new Database().putTimeByFunction("scheduler_timestamp", end);
     }
 
     private static void sendTasks(Task[] tasks) {
@@ -131,8 +131,8 @@ public class Task {
         Gson gson = new Gson();
         JsonTasks[] jsonTasks = gson.fromJson(json, JsonTasks[].class);
         ArrayList<String> tasksUid = new ArrayList<>();
-        for (int i = 0; i < jsonTasks.length; i++) {
-            tasksUid.add(jsonTasks[i].task_id);
+        for (JsonTasks jsonTask : jsonTasks) {
+            tasksUid.add(jsonTask.task_id);
         }
         return tasksUid;
     }
@@ -244,7 +244,7 @@ public class Task {
 
     String resolveTask(boolean reply) {
         Map<String, String> params = new HashMap<>();
-        params.put("resolve", (reply != false ? "yes" : "no"));
+        params.put("resolve", (reply ? "yes" : "no"));
         params.put("performer_uid", performer.getUid());
         params.put("comment", "Выполнено через telegram");
         String json = null;

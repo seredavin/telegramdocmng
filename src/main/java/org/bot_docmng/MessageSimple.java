@@ -23,7 +23,7 @@ public class MessageSimple implements Message {
 
     @Override
     public void send() {
-        Bot bot = new Bot();
+        Bot bot = new Bot(Setup.getInstance().getBotOptions());
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(taskText);
@@ -39,7 +39,7 @@ public class MessageSimple implements Message {
     @Override
     public void update() {
         if (messageId != null) {
-            Bot bot = new Bot();
+            Bot bot = new Bot(Setup.getInstance().getBotOptions());
             EditMessageText message = new EditMessageText();
             message.setChatId(chatId);
             message.setMessageId(Integer.parseInt(messageId));

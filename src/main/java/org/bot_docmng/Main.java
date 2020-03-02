@@ -9,6 +9,6 @@ public class Main {
         Runnable RunBot = () -> Bot.start();
         new Thread(RunBot).start();
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleWithFixedDelay(() -> Task.sendTasksFromPeriod(), 1, 1, TimeUnit.MINUTES);
+        executor.scheduleWithFixedDelay(() -> Task.sendTasksFromPeriod(), 0, 1, TimeUnit.MINUTES);
     }
 }

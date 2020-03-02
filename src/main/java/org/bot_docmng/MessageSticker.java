@@ -3,7 +3,6 @@ package org.bot_docmng;
 import org.telegram.telegrambots.meta.api.methods.send.SendSticker;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.File;
 import java.io.InputStream;
 
 public class MessageSticker implements Message {
@@ -19,7 +18,7 @@ public class MessageSticker implements Message {
 
     @Override
     public void send() {
-        Bot bot = new Bot();
+        Bot bot = new Bot(Setup.getInstance().getBotOptions());
         SendSticker message = new SendSticker();
         message.setChatId(chatId);
         message.setSticker(stickerName, sticker);
