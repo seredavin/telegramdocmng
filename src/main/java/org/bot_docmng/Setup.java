@@ -27,7 +27,7 @@ final class Setup {
 
     DefaultBotOptions getBotOptions() {
         DefaultBotOptions botOptions = ApiContext.getInstance(DefaultBotOptions.class);
-        if (!env.get("SOCKS_HOST").isEmpty() && !env.get("SOCKS_PORT").isEmpty()) {
+        if (env.get("SOCKS_HOST") != null && env.get("SOCKS_PORT") != null) {
             botOptions.setProxyHost(env.get("SOCKS_HOST"));
             botOptions.setProxyPort(Integer.parseInt(env.get("SOCKS_PORT")));
             botOptions.setProxyType(DefaultBotOptions.ProxyType.SOCKS5);
